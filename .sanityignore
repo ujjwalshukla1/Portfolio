@@ -1,0 +1,8 @@
+# Sanity Ignore Rules
+node_modules/
+dist/
+build/
+.next/
+*.log
+*.env.local
+*.env.*.local

@@ -1,8 +1,6 @@
 'use client'
 
 import React, { useRef, useEffect, useMemo } from 'react'
-import { urlFor } from '@/lib/image'
-import Image from 'next/image'
 import gsap from 'gsap'
 
 interface HeroSectionProps {
@@ -310,8 +308,7 @@ export function HeroSection({ title, subtitle, description, ctaText = 'View My W
             </div>
           </div>
 
-          {image && (
-            <div className="relative flex items-center justify-center h-112 md:h-128">
+          <div className="relative flex items-center justify-center h-112 md:h-128">
               {/* Rotating dashed ring */}
               <div
                 ref={ringRef}
@@ -321,36 +318,131 @@ export function HeroSection({ title, subtitle, description, ctaText = 'View My W
               {/* Glowing backdrop */}
               <div className="absolute w-64 h-64 md:w-72 md:h-72 bg-linear-to-br from-blue-500/20 to-cyan-500/20 rounded-full blur-2xl" />
 
-              {/* Image with unique organic blob shape */}
-              <div
-                ref={imageContainerRef}
-                className="relative w-64 h-64 md:w-72 md:h-72"
-                style={{
-                  clipPath: 'polygon(50% 0%, 85% 10%, 100% 40%, 95% 75%, 70% 100%, 30% 100%, 5% 75%, 0% 40%, 15% 10%)',
-                }}
-              >
-                <Image
-                  src={urlFor(image).url()}
-                  alt={title}
-                  fill
-                  className="object-cover"
-                />
-                {/* Gradient overlay */}
-                <div
-                  className="absolute inset-0 bg-linear-to-t from-blue-900/30 to-transparent"
-                  style={{
-                    clipPath: 'polygon(50% 0%, 85% 10%, 100% 40%, 95% 75%, 70% 100%, 30% 100%, 5% 75%, 0% 40%, 15% 10%)',
-                  }}
-                />
-              </div>
+              {/* Developer workspace illustration */}
+              <div ref={imageContainerRef} className="relative w-72 h-72 md:w-80 md:h-80">
+                <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-2xl">
+                  {/* Monitor */}
+                  <rect x="60" y="60" width="280" height="200" rx="12" fill="#0f172a" stroke="#334155" strokeWidth="2" />
+                  <rect x="60" y="60" width="280" height="24" rx="12" fill="#1e293b" />
+                  {/* Traffic lights */}
+                  <circle cx="80" cy="72" r="5" fill="#f87171" />
+                  <circle cx="96" cy="72" r="5" fill="#fbbf24" />
+                  <circle cx="112" cy="72" r="5" fill="#4ade80" />
+                  {/* Tab */}
+                  <rect x="130" y="66" width="60" height="12" rx="3" fill="#334155" />
+                  <text x="140" y="75" fontSize="7" fill="#94a3b8" fontFamily="monospace">App.tsx</text>
 
-              {/* Border ring matching the shape */}
-              <div
-                className="absolute w-68 h-68 md:w-76 md:h-76 border-2 border-cyan-400/40"
-                style={{
-                  clipPath: 'polygon(50% 0%, 85% 10%, 100% 40%, 95% 75%, 70% 100%, 30% 100%, 5% 75%, 0% 40%, 15% 10%)',
-                }}
-              />
+                  {/* Code lines */}
+                  <text x="76" y="104" fontSize="8" fill="#64748b" fontFamily="monospace">1</text>
+                  <text x="90" y="104" fontSize="8" fill="#c084fc" fontFamily="monospace">import</text>
+                  <text x="126" y="104" fontSize="8" fill="#e2e8f0" fontFamily="monospace">React</text>
+                  <text x="158" y="104" fontSize="8" fill="#c084fc" fontFamily="monospace">from</text>
+                  <text x="180" y="104" fontSize="8" fill="#fbbf24" fontFamily="monospace">{`'react'`}</text>
+
+                  <text x="76" y="118" fontSize="8" fill="#64748b" fontFamily="monospace">2</text>
+                  <text x="90" y="118" fontSize="8" fill="#c084fc" fontFamily="monospace">import</text>
+                  <text x="126" y="118" fontSize="8" fill="#22d3ee" fontFamily="monospace">{'{ motion }'}</text>
+                  <text x="194" y="118" fontSize="8" fill="#c084fc" fontFamily="monospace">from</text>
+                  <text x="216" y="118" fontSize="8" fill="#fbbf24" fontFamily="monospace">{`'framer'`}</text>
+
+                  <text x="76" y="136" fontSize="8" fill="#64748b" fontFamily="monospace">3</text>
+
+                  <text x="76" y="150" fontSize="8" fill="#64748b" fontFamily="monospace">4</text>
+                  <text x="90" y="150" fontSize="8" fill="#c084fc" fontFamily="monospace">export</text>
+                  <text x="122" y="150" fontSize="8" fill="#c084fc" fontFamily="monospace">const</text>
+                  <text x="150" y="150" fontSize="8" fill="#60a5fa" fontFamily="monospace">App</text>
+                  <text x="168" y="150" fontSize="8" fill="#e2e8f0" fontFamily="monospace">= () =&gt; {'{'}</text>
+
+                  <text x="76" y="164" fontSize="8" fill="#64748b" fontFamily="monospace">5</text>
+                  <text x="100" y="164" fontSize="8" fill="#c084fc" fontFamily="monospace">return</text>
+                  <text x="134" y="164" fontSize="8" fill="#e2e8f0" fontFamily="monospace">(</text>
+
+                  <text x="76" y="178" fontSize="8" fill="#64748b" fontFamily="monospace">6</text>
+                  <text x="110" y="178" fontSize="8" fill="#4ade80" fontFamily="monospace">&lt;div</text>
+                  <text x="138" y="178" fontSize="8" fill="#60a5fa" fontFamily="monospace">className</text>
+                  <text x="186" y="178" fontSize="8" fill="#e2e8f0" fontFamily="monospace">=</text>
+                  <text x="192" y="178" fontSize="8" fill="#fbbf24" fontFamily="monospace">{`"app"`}</text>
+                  <text x="218" y="178" fontSize="8" fill="#4ade80" fontFamily="monospace">&gt;</text>
+
+                  <text x="76" y="192" fontSize="8" fill="#64748b" fontFamily="monospace">7</text>
+                  <text x="120" y="192" fontSize="8" fill="#4ade80" fontFamily="monospace">&lt;h1&gt;</text>
+                  <text x="144" y="192" fontSize="8" fill="#e2e8f0" fontFamily="monospace">Hello World</text>
+                  <text x="210" y="192" fontSize="8" fill="#4ade80" fontFamily="monospace">&lt;/h1&gt;</text>
+
+                  <text x="76" y="206" fontSize="8" fill="#64748b" fontFamily="monospace">8</text>
+                  <text x="120" y="206" fontSize="8" fill="#22d3ee" fontFamily="monospace">&lt;Portfolio</text>
+                  <text x="186" y="206" fontSize="8" fill="#22d3ee" fontFamily="monospace">/&gt;</text>
+
+                  <text x="76" y="220" fontSize="8" fill="#64748b" fontFamily="monospace">9</text>
+                  <text x="110" y="220" fontSize="8" fill="#4ade80" fontFamily="monospace">&lt;/div&gt;</text>
+
+                  <text x="76" y="234" fontSize="8" fill="#64748b" fontFamily="monospace">10</text>
+                  <text x="100" y="234" fontSize="8" fill="#e2e8f0" fontFamily="monospace">)</text>
+
+                  <text x="76" y="248" fontSize="8" fill="#64748b" fontFamily="monospace">11</text>
+                  <text x="90" y="248" fontSize="8" fill="#e2e8f0" fontFamily="monospace">{'}'}</text>
+
+                  {/* Cursor blink line */}
+                  <rect x="200" y="198" width="1.5" height="12" fill="#22d3ee" opacity="0.8">
+                    <animate attributeName="opacity" values="0.8;0;0.8" dur="1s" repeatCount="indefinite" />
+                  </rect>
+
+                  {/* Monitor stand */}
+                  <rect x="170" y="260" width="60" height="10" rx="2" fill="#1e293b" />
+                  <rect x="150" y="270" width="100" height="6" rx="3" fill="#334155" />
+
+                  {/* Floating elements around the monitor */}
+                  {/* React logo */}
+                  <g transform="translate(20, 100)">
+                    <circle cx="16" cy="16" r="18" fill="#0f172a" stroke="#22d3ee" strokeWidth="1" opacity="0.6" />
+                    <ellipse cx="16" cy="16" rx="12" ry="5" stroke="#22d3ee" strokeWidth="1" fill="none" opacity="0.7" transform="rotate(0, 16, 16)" />
+                    <ellipse cx="16" cy="16" rx="12" ry="5" stroke="#22d3ee" strokeWidth="1" fill="none" opacity="0.7" transform="rotate(60, 16, 16)" />
+                    <ellipse cx="16" cy="16" rx="12" ry="5" stroke="#22d3ee" strokeWidth="1" fill="none" opacity="0.7" transform="rotate(120, 16, 16)" />
+                    <circle cx="16" cy="16" r="2.5" fill="#22d3ee" />
+                  </g>
+
+                  {/* TypeScript badge */}
+                  <g transform="translate(350, 130)">
+                    <rect width="32" height="32" rx="6" fill="#3178c6" opacity="0.8" />
+                    <text x="7" y="23" fontSize="16" fill="white" fontFamily="monospace" fontWeight="bold">TS</text>
+                  </g>
+
+                  {/* Git branch */}
+                  <g transform="translate(20, 210)">
+                    <circle cx="12" cy="8" r="8" fill="none" stroke="#f97316" strokeWidth="1" opacity="0.5" />
+                    <circle cx="12" cy="8" r="3" fill="#f97316" opacity="0.6" />
+                    <line x1="12" y1="16" x2="12" y2="28" stroke="#f97316" strokeWidth="1" opacity="0.4" />
+                    <circle cx="12" cy="32" r="3" fill="#f97316" opacity="0.6" />
+                  </g>
+
+                  {/* Terminal icon */}
+                  <g transform="translate(350, 220)">
+                    <rect width="30" height="24" rx="4" fill="#0f172a" stroke="#4ade80" strokeWidth="1" opacity="0.6" />
+                    <text x="5" y="17" fontSize="10" fill="#4ade80" fontFamily="monospace" opacity="0.8">&gt;_</text>
+                  </g>
+
+                  {/* Floating brackets */}
+                  <text x="30" y="55" fontSize="24" fill="#6366f1" fontFamily="monospace" opacity="0.2">{'{'}</text>
+                  <text x="360" y="80" fontSize="24" fill="#6366f1" fontFamily="monospace" opacity="0.2">{'}'}</text>
+                  <text x="10" y="310" fontSize="18" fill="#22d3ee" fontFamily="monospace" opacity="0.15">&lt;/&gt;</text>
+                  <text x="355" y="310" fontSize="18" fill="#22d3ee" fontFamily="monospace" opacity="0.15">=&gt;</text>
+
+                  {/* Connection lines */}
+                  <line x1="38" y1="116" x2="60" y2="130" stroke="#22d3ee" strokeWidth="0.5" opacity="0.3" strokeDasharray="3 3" />
+                  <line x1="362" y1="146" x2="340" y2="170" stroke="#3178c6" strokeWidth="0.5" opacity="0.3" strokeDasharray="3 3" />
+                  <line x1="32" y1="240" x2="60" y2="230" stroke="#f97316" strokeWidth="0.5" opacity="0.3" strokeDasharray="3 3" />
+                  <line x1="352" y1="232" x2="340" y2="220" stroke="#4ade80" strokeWidth="0.5" opacity="0.3" strokeDasharray="3 3" />
+
+                  {/* Glow effect behind monitor */}
+                  <defs>
+                    <radialGradient id="monitorGlow" cx="50%" cy="45%" r="50%">
+                      <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.15" />
+                      <stop offset="100%" stopColor="#06b6d4" stopOpacity="0" />
+                    </radialGradient>
+                  </defs>
+                  <rect x="40" y="40" width="320" height="240" rx="20" fill="url(#monitorGlow)" />
+                </svg>
+              </div>
 
               {/* Widget 1: Code snippet - top right */}
               <div
@@ -419,7 +511,6 @@ export function HeroSection({ title, subtitle, description, ctaText = 'View My W
                 </div>
               </div>
             </div>
-          )}
         </div>
       </div>
     </section>

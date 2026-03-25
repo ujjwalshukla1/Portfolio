@@ -5,6 +5,7 @@ import { AboutSection } from '@/components/about'
 import { SkillsSection } from '@/components/skills'
 import { ProjectsSection } from '@/components/projects'
 import { ContactSection } from '@/components/contact'
+import { SmoothScroll } from '@/components/smooth-scroll'
 
 const HERO_QUERY = `*[_type == "hero"][0]`
 const ABOUT_QUERY = `*[_type == "about"][0]`
@@ -99,7 +100,7 @@ export default async function Home() {
   const contact = contactData || defaultContact
 
   return (
-    <>
+    <SmoothScroll>
       <Navbar />
       <HeroSection {...hero} />
       <AboutSection {...about} />
@@ -107,6 +108,6 @@ export default async function Home() {
       <ProjectsSection projects={projects} />
       <ContactSection contactData={contact} />
       <Footer />
-    </>
+    </SmoothScroll>
   )
 }

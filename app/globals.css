@@ -18,81 +18,518 @@
   --animate-blob: blob 7s infinite;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0f172a;
-    --foreground: #f1f5f9;
-  }
-}
-
 @keyframes blob {
-  0%, 100% {
-    transform: translate(0, 0) scale(1);
-  }
-  33% {
-    transform: translate(30px, -50px) scale(1.1);
-  }
-  66% {
-    transform: translate(-20px, 20px) scale(0.9);
-  }
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
 }
 
 @keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
 }
 
-.animate-blob {
-  animation: blob 7s infinite;
-}
+.animate-blob { animation: blob 7s infinite; }
+.animation-delay-2000 { animation-delay: 2s; }
+.animation-delay-4000 { animation-delay: 4s; }
+.animate-float { animation: float 3s ease-in-out infinite; }
 
-.animation-delay-2000 {
-  animation-delay: 2s;
-}
+/* Lenis handles smooth scrolling — disable native */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
 
-.animation-delay-4000 {
-  animation-delay: 4s;
-}
+/* ========== Scrollbar ========== */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #0f172a; }
+::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #334155; }
 
-.animate-float {
-  animation: float 3s ease-in-out infinite;
-}
+[data-theme="light"] ::-webkit-scrollbar-track { background: #f1f5f9; }
+[data-theme="light"] ::-webkit-scrollbar-thumb { background: #cbd5e1; }
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
-}
+/* ========== Selection ========== */
+::selection { background: #06b6d4; color: #000; }
+[data-theme="light"] ::selection { background: #0891b2; color: #fff; }
 
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #0f172a;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #1e293b;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #334155;
-}
-
-/* Selection */
-::selection {
-  background: #06b6d4;
-  color: #000;
-}
-
+/* ========== Body ========== */
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+[data-theme="light"] body {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+}
+
+/* ========== Smooth transitions ========== */
+section, nav, footer, div, span, p, h1, h2, h3, h4, button, a, pre {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* =================================================================
+   LIGHT THEME — Section-by-section overrides
+   ================================================================= */
+
+/* ---- Global section backgrounds ---- */
+[data-theme="light"] section {
+  background: linear-gradient(to bottom, #f8fafc, #f1f5f9) !important;
+}
+
+/* Alternate sections get slightly different shade for visual separation */
+[data-theme="light"] #about {
+  background: linear-gradient(to bottom, #f1f5f9, #e8eef5) !important;
+}
+
+[data-theme="light"] #skills {
+  background: linear-gradient(to bottom, #eef2f7, #f1f5f9) !important;
+}
+
+[data-theme="light"] #projects {
+  background: linear-gradient(to bottom, #f1f5f9, #eef2f7) !important;
+}
+
+[data-theme="light"] #contact {
+  background: linear-gradient(to bottom, #eef2f7, #f1f5f9) !important;
+}
+
+/* ---- Blobs — softer on light ---- */
+[data-theme="light"] .animate-blob {
+  opacity: 0.06 !important;
+}
+
+/* ---- NAVBAR ---- */
+[data-theme="light"] nav {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+[data-theme="light"] nav button.text-gray-300,
+[data-theme="light"] nav .text-gray-300 {
+  color: #475569 !important;
+}
+
+[data-theme="light"] nav button:hover {
+  color: #0891b2 !important;
+}
+
+[data-theme="light"] nav .bg-slate-700 {
+  background: #e2e8f0 !important;
+}
+
+[data-theme="light"] nav .bg-slate-700:hover,
+[data-theme="light"] nav .hover\:bg-slate-600:hover {
+  background: #cbd5e1 !important;
+}
+
+[data-theme="light"] nav .bg-slate-800 {
+  background: #f1f5f9 !important;
+}
+
+/* Mobile menu */
+[data-theme="light"] nav .border-slate-700 {
+  border-color: #e2e8f0 !important;
+}
+
+[data-theme="light"] nav .hover\:bg-slate-800\/50:hover {
+  background: rgba(226, 232, 240, 0.5) !important;
+}
+
+/* ---- TEXT COLORS ---- */
+[data-theme="light"] .text-white {
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .text-gray-300 {
+  color: #475569 !important;
+}
+
+[data-theme="light"] .text-gray-400 {
+  color: #64748b !important;
+}
+
+[data-theme="light"] .text-slate-400 {
+  color: #64748b !important;
+}
+
+[data-theme="light"] .text-slate-500 {
+  color: #94a3b8 !important;
+}
+
+/* ---- ACCENT COLORS — deeper for light bg contrast ---- */
+[data-theme="light"] .text-cyan-400 {
+  color: #0891b2 !important;
+}
+
+[data-theme="light"] .text-cyan-300 {
+  color: #0e7490 !important;
+}
+
+[data-theme="light"] .text-blue-300 {
+  color: #2563eb !important;
+}
+
+[data-theme="light"] .text-indigo-400 {
+  color: #4f46e5 !important;
+}
+
+[data-theme="light"] .text-green-400 {
+  color: #16a34a !important;
+}
+
+[data-theme="light"] .text-purple-400 {
+  color: #9333ea !important;
+}
+
+[data-theme="light"] .text-amber-300 {
+  color: #d97706 !important;
+}
+
+/* ---- CARDS & GLASS PANELS ---- */
+[data-theme="light"] .bg-slate-800\/50 {
+  background: rgba(255, 255, 255, 0.75) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .bg-slate-800\/90 {
+  background: rgba(255, 255, 255, 0.92) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .bg-slate-800\/70 {
+  background: rgba(241, 245, 249, 0.9) !important;
+}
+
+/* ---- BORDERS ---- */
+[data-theme="light"] .border-slate-700 {
+  border-color: #e2e8f0 !important;
+}
+
+[data-theme="light"] .border-slate-600\/50,
+[data-theme="light"] .border-slate-600\/40 {
+  border-color: #e2e8f0 !important;
+}
+
+[data-theme="light"] .hover\:border-cyan-500\/50:hover {
+  border-color: rgba(8, 145, 178, 0.4) !important;
+}
+
+/* ---- SKILL BARS ---- */
+[data-theme="light"] .bg-slate-700 {
+  background: #e2e8f0 !important;
+}
+
+[data-theme="light"] .skill-bar-fill {
+  background: linear-gradient(to right, #2563eb, #0891b2) !important;
+}
+
+/* ---- TECH BADGES ---- */
+[data-theme="light"] .bg-slate-700\/50 {
+  background: rgba(226, 232, 240, 0.6) !important;
+}
+
+[data-theme="light"] .bg-cyan-500\/10 {
+  background: rgba(8, 145, 178, 0.08) !important;
+}
+
+[data-theme="light"] .border-cyan-500\/30 {
+  border-color: rgba(8, 145, 178, 0.25) !important;
+}
+
+/* ---- BUTTONS ---- */
+/* CTA / Live buttons stay vibrant */
+[data-theme="light"] .bg-cyan-500 {
+  background: #0891b2 !important;
+  color: #fff !important;
+}
+
+[data-theme="light"] .bg-cyan-500:hover {
+  box-shadow: 0 8px 25px rgba(8, 145, 178, 0.3) !important;
+}
+
+/* Secondary buttons */
+[data-theme="light"] .bg-slate-700 {
+  background: #e2e8f0 !important;
+}
+
+[data-theme="light"] a.bg-slate-700,
+[data-theme="light"] button.bg-slate-700 {
+  background: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+[data-theme="light"] a.bg-slate-700:hover,
+[data-theme="light"] a.hover\:bg-slate-600:hover {
+  background: #cbd5e1 !important;
+}
+
+/* Social link buttons */
+[data-theme="light"] a.hover\:bg-cyan-500:hover {
+  background: #0891b2 !important;
+  color: #fff !important;
+}
+
+/* ---- HERO SECTION ---- */
+/* Gradient text — deeper for light mode visibility */
+[data-theme="light"] .bg-linear-to-r.from-blue-400.to-cyan-300 {
+  --tw-gradient-from: #2563eb !important;
+  --tw-gradient-to: #0891b2 !important;
+}
+
+[data-theme="light"] .bg-gradient-to-r.from-blue-400.to-cyan-300 {
+  --tw-gradient-from: #2563eb !important;
+  --tw-gradient-to: #0891b2 !important;
+}
+
+/* Cursor */
+[data-theme="light"] .bg-cyan-400 {
+  background: #0891b2 !important;
+}
+
+/* Ring */
+[data-theme="light"] .border-dashed.border-cyan-500\/30 {
+  border-color: rgba(8, 145, 178, 0.2) !important;
+}
+
+/* Shape border */
+[data-theme="light"] .border-cyan-400\/40 {
+  border-color: rgba(8, 145, 178, 0.25) !important;
+}
+
+/* Hero glow backdrops — softer */
+[data-theme="light"] .bg-linear-to-br.from-blue-500\/20.to-cyan-500\/20 {
+  opacity: 0.4;
+}
+
+/* Image overlays — lighter */
+[data-theme="light"] .bg-linear-to-t.from-blue-900\/30 {
+  background: linear-gradient(to top, rgba(241, 245, 249, 0.3), transparent) !important;
+}
+
+/* Widget code snippet */
+[data-theme="light"] pre {
+  color: #0f172a;
+}
+
+/* ---- ABOUT SECTION ---- */
+/* Border ring inner fill — match light bg */
+[data-theme="light"] #about .bg-slate-950 {
+  background: #f1f5f9 !important;
+}
+
+/* Image vignette — softer */
+[data-theme="light"] .shadow-\[inset_0_0_60px_rgba\(0\,0\,0\,0\.4\)\] {
+  box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Image bottom fade */
+[data-theme="light"] .bg-linear-to-t.from-slate-950\/60 {
+  background: linear-gradient(to top, rgba(241, 245, 249, 0.5), transparent) !important;
+}
+
+/* Image shadow */
+[data-theme="light"] .shadow-indigo-500\/20 {
+  --tw-shadow-color: rgba(79, 70, 229, 0.1);
+}
+
+/* Accent lines */
+[data-theme="light"] .from-cyan-400\/60 {
+  --tw-gradient-from: rgba(8, 145, 178, 0.35) !important;
+}
+
+[data-theme="light"] .from-indigo-400\/60 {
+  --tw-gradient-from: rgba(79, 70, 229, 0.35) !important;
+}
+
+/* Particles — slightly more visible on light */
+[data-theme="light"] .about-particle {
+  opacity: 0.7;
+}
+
+/* About tags */
+[data-theme="light"] .about-tag {
+  background: rgba(226, 232, 240, 0.8) !important;
+  border-color: #cbd5e1 !important;
+  color: #475569 !important;
+}
+
+[data-theme="light"] .about-tag:hover {
+  border-color: rgba(8, 145, 178, 0.4) !important;
+  color: #0891b2 !important;
+}
+
+/* ---- SKILLS SECTION ---- */
+[data-theme="light"] #skills .skill-card {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] #skills .bg-slate-800\/50 {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* Terminal header */
+[data-theme="light"] #skills .bg-slate-900\/60 {
+  background: rgba(241, 245, 249, 0.8) !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* Skill bar track */
+[data-theme="light"] #skills .h-2.bg-slate-700,
+[data-theme="light"] #skills .bg-slate-700 {
+  background: #e2e8f0 !important;
+}
+
+/* Scan line — darker for visibility on light */
+[data-theme="light"] #skills .scan-line {
+  background: rgba(8, 145, 178, 0.6) !important;
+  box-shadow: 0 0 8px rgba(8, 145, 178, 0.5) !important;
+}
+
+/* Code symbols — subtle on light */
+[data-theme="light"] #skills .code-symbol {
+  color: rgba(8, 145, 178, 0.1) !important;
+}
+
+/* Dot grid canvas — will be less visible naturally on light bg */
+
+/* Bottom hover glow line */
+[data-theme="light"] #skills .group:hover .group-hover\:via-cyan-500\/40 {
+  --tw-gradient-via: rgba(8, 145, 178, 0.25);
+}
+
+/* ---- PROJECTS SECTION ---- */
+/* Featured project image overlay */
+[data-theme="light"] .bg-gradient-to-t.from-slate-950 {
+  background: linear-gradient(to top, rgba(241, 245, 249, 0.5), transparent) !important;
+}
+
+/* Project cards */
+[data-theme="light"] #projects .bg-slate-800\/50 {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] #projects .hover\:shadow-cyan-500\/10:hover {
+  box-shadow: 0 8px 30px rgba(8, 145, 178, 0.1) !important;
+}
+
+/* Project tech badges */
+[data-theme="light"] .bg-slate-700\/50.text-cyan-300 {
+  background: rgba(226, 232, 240, 0.6) !important;
+  color: #0e7490 !important;
+}
+
+/* ---- CONTACT SECTION ---- */
+[data-theme="light"] #contact .bg-slate-800\/50 {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] #contact .border-t.border-slate-700 {
+  border-color: #e2e8f0 !important;
+}
+
+/* Social buttons */
+[data-theme="light"] #contact a.bg-slate-700 {
+  background: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+[data-theme="light"] #contact a.bg-slate-700:hover,
+[data-theme="light"] #contact a.hover\:bg-cyan-500:hover {
+  background: #0891b2 !important;
+  color: #fff !important;
+}
+
+/* ---- FOOTER ---- */
+[data-theme="light"] footer {
+  background: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
+}
+
+[data-theme="light"] footer .text-gray-400 {
+  color: #64748b !important;
+}
+
+/* ---- PROSE (About bio) ---- */
+[data-theme="light"] .prose-invert {
+  --tw-prose-body: #475569 !important;
+  --tw-prose-headings: #0f172a !important;
+  --tw-prose-links: #0891b2 !important;
+  --tw-prose-bold: #0f172a !important;
+}
+
+/* ---- GRADIENT BUTTONS (CTA) keep their gradient but deepen ---- */
+[data-theme="light"] .bg-linear-to-r.from-blue-500.to-cyan-400 {
+  --tw-gradient-from: #2563eb !important;
+  --tw-gradient-to: #0891b2 !important;
+}
+
+[data-theme="light"] .bg-gradient-to-r.from-blue-500.to-cyan-400 {
+  --tw-gradient-from: #2563eb !important;
+  --tw-gradient-to: #0891b2 !important;
+}
+
+/* ---- MISC OPACITY FIXES ---- */
+[data-theme="light"] .opacity-15 {
+  opacity: 0.06 !important;
+}
+
+[data-theme="light"] .opacity-10 {
+  opacity: 0.05 !important;
+}
+
+[data-theme="light"] .opacity-20 {
+  opacity: 0.08 !important;
+}
+
+/* Logo gradient */
+[data-theme="light"] .bg-gradient-to-r.from-blue-400.to-cyan-300 {
+  --tw-gradient-from: #2563eb !important;
+  --tw-gradient-to: #0891b2 !important;
+}
+
+/* Image hover overlays */
+[data-theme="light"] .group:hover .group-hover\:scale-110 {
+  transform: scale(1.05);
+}
+
+/* Widget shadows — softer on light */
+[data-theme="light"] .shadow-lg.shadow-black\/20 {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* About section gradient border inner bg */
+[data-theme="light"] .rounded-4xl.bg-slate-950 {
+  background: #f1f5f9 !important;
+}
+
+/* ---- SCROLL TECH LINES ---- */
+[data-theme="light"] .tech-line-inner {
+  opacity: 0.5;
+}
+
+[data-theme="light"] .tech-node .bg-cyan-400 {
+  background: #0891b2 !important;
+}
+
+[data-theme="light"] .tech-node .bg-blue-400 {
+  background: #2563eb !important;
+}
+
+[data-theme="light"] .data-stream {
+  opacity: 0.6;
+}
+
+[data-theme="light"] .node-pulse {
+  opacity: 0.2;
 }

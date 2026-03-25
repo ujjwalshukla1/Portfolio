@@ -1,6 +1,6 @@
 'use client'
 
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react'
 
 type Theme = 'dark' | 'light'
 
@@ -16,31 +16,23 @@ const ThemeContext = createContext<ThemeContextType>({
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>('dark')
-  const [mounted, setMounted] = useState(false)
 
+  // Sync from localStorage after mount (avoids hydration mismatch)
   useEffect(() => {
     const stored = localStorage.getItem('theme') as Theme | null
-    if (stored) {
+    if (stored && stored !== theme) {
       setTheme(stored)
     }
-    setMounted(true)
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (!mounted) return
-    const root = document.documentElement
-    root.setAttribute('data-theme', theme)
+    document.documentElement.setAttribute('data-theme', theme)
     localStorage.setItem('theme', theme)
-  }, [theme, mounted])
+  }, [theme])
 
-  const toggleTheme = () => {
+  const toggleTheme = useCallback(() => {
     setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'))
-  }
-
-  // Prevent flash of wrong theme
-  if (!mounted) {
-    return <div style={{ visibility: 'hidden' }}>{children}</div>
-  }
+  }, [])
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>

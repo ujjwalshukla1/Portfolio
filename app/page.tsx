@@ -3,6 +3,7 @@ import { Navbar, Footer } from '@/components/header'
 import { HeroSection } from '@/components/hero'
 import { AboutSection } from '@/components/about'
 import { SkillsSection } from '@/components/skills'
+import { JourneySection } from '@/components/journey'
 import { ProjectsSection } from '@/components/projects'
 import { ContactSection } from '@/components/contact'
 import { SmoothScroll } from '@/components/smooth-scroll'
@@ -14,6 +15,7 @@ const HERO_QUERY = `*[_type == "hero"][0]`
 const ABOUT_QUERY = `*[_type == "about"][0]`
 const SKILLS_QUERY = `*[_type == "skill"] | order(category, proficiency desc)`
 const PROJECTS_QUERY = `*[_type == "project"] | order(order asc, _createdAt desc) { ..., slug }`
+const JOURNEY_QUERY = `*[_type == "journey"] | order(order asc, _createdAt desc)`
 const CONTACT_QUERY = `*[_type == "contact"][0]`
 
 const defaultHero = {
@@ -76,6 +78,29 @@ const defaultProjects = [
   },
 ]
 
+const defaultJourney = [
+  {
+    _id: 'default-j1',
+    title: 'Full Stack Developer',
+    organization: 'Freelance',
+    type: 'work' as const,
+    startDate: 'Jan 2023',
+    endDate: 'Present',
+    description: 'Building modern web applications with Next.js, React, and Node.js for various clients.',
+    technologies: [{ tech: 'Next.js' }, { tech: 'React' }, { tech: 'Node.js' }, { tech: 'TypeScript' }],
+  },
+  {
+    _id: 'default-j2',
+    title: 'Computer Science',
+    organization: 'University',
+    type: 'education' as const,
+    startDate: 'Aug 2019',
+    endDate: 'May 2023',
+    description: 'Bachelor\'s degree in Computer Science with focus on software engineering and web technologies.',
+    technologies: [{ tech: 'Data Structures' }, { tech: 'Algorithms' }, { tech: 'Web Dev' }],
+  },
+]
+
 const defaultContact = {
   title: 'Get In Touch',
   email: 'hello@example.com',
@@ -88,10 +113,11 @@ const defaultContact = {
 }
 
 export default async function Home() {
-  const [heroData, aboutData, skillsData, projectsData, contactData] = await Promise.all([
+  const [heroData, aboutData, skillsData, journeyData, projectsData, contactData] = await Promise.all([
     sanityFetch({ query: HERO_QUERY }).catch(() => null),
     sanityFetch({ query: ABOUT_QUERY }).catch(() => null),
     sanityFetch({ query: SKILLS_QUERY }).catch(() => []),
+    sanityFetch({ query: JOURNEY_QUERY }).catch(() => []),
     sanityFetch({ query: PROJECTS_QUERY }).catch(() => []),
     sanityFetch({ query: CONTACT_QUERY }).catch(() => null),
   ])
@@ -99,6 +125,7 @@ export default async function Home() {
   const hero = heroData || defaultHero
   const about = aboutData || defaultAbout
   const skills = (skillsData && skillsData.length > 0) ? skillsData : defaultSkills
+  const journeyItems = (journeyData && journeyData.length > 0) ? journeyData : defaultJourney
   const projects = (projectsData && projectsData.length > 0) ? projectsData : defaultProjects
   const contact = contactData || defaultContact
 
@@ -108,6 +135,7 @@ export default async function Home() {
       <HeroSection {...hero} />
       <AboutSection {...about} />
       <SkillsSection skills={skills} />
+      <JourneySection journeyItems={journeyItems} />
       <ProjectsSection projects={projects} />
       <ContactSection contactData={contact} />
       <Footer />

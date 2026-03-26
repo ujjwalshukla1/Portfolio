@@ -5,7 +5,7 @@ import { FadeIn } from './animations'
 import { useTheme } from './theme-provider'
 
 export function Navbar() {
-  const sections = ['Home', 'About', 'Projects', 'Skills', 'Contact']
+  const sections = ['Home', 'About', 'Skills', 'Journey', 'Projects', 'Contact']
   const { theme, toggleTheme } = useTheme()
   const [mobileOpen, setMobileOpen] = useState(false)
 

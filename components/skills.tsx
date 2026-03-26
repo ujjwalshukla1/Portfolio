@@ -297,12 +297,18 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
     }
   }, [skills])
 
+  const categoryOrder = ['frontend', 'backend', 'databases', 'tools', 'other']
+
   const groupedSkills = skills.reduce<Record<string, SkillsData[]>>((acc, skill) => {
     const category = skill.category
     if (!acc[category]) acc[category] = []
     acc[category].push(skill)
     return acc
   }, {})
+
+  const sortedCategories = Object.keys(groupedSkills).sort(
+    (a, b) => (categoryOrder.indexOf(a) === -1 ? 99 : categoryOrder.indexOf(a)) - (categoryOrder.indexOf(b) === -1 ? 99 : categoryOrder.indexOf(b))
+  )
 
   return (
     <section
@@ -353,7 +359,8 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
 
         {/* Category cards */}
         <div ref={cardsContainerRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {Object.entries(groupedSkills).map(([category, categorySkills]) => {
+          {sortedCategories.map((category) => {
+            const categorySkills = groupedSkills[category]
             const icon = categoryIcons[category] || '●'
             return (
               <div

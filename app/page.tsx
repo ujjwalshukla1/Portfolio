@@ -7,6 +7,9 @@ import { ProjectsSection } from '@/components/projects'
 import { ContactSection } from '@/components/contact'
 import { SmoothScroll } from '@/components/smooth-scroll'
 
+// Revalidate data from Sanity every 60 seconds
+export const revalidate = 60
+
 const HERO_QUERY = `*[_type == "hero"][0]`
 const ABOUT_QUERY = `*[_type == "about"][0]`
 const SKILLS_QUERY = `*[_type == "skill"] | order(category, proficiency desc)`

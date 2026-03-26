@@ -24,6 +24,7 @@ interface SkillsSectionProps {
 const categoryIcons: Record<string, string> = {
   frontend: '</>',
   backend: '{ }',
+  databases: '⛁',
   tools: '> _',
   design: '◇',
 }

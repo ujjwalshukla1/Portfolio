@@ -11,6 +11,7 @@ const skillSchema = {
         list: [
           { title: 'Frontend', value: 'frontend' },
           { title: 'Backend', value: 'backend' },
+          { title: 'Databases', value: 'databases' },
           { title: 'Tools', value: 'tools' },
           { title: 'Other', value: 'other' },
         ],

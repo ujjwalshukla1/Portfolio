@@ -6,7 +6,6 @@ import { urlFor } from '@/lib/image'
 import Image from 'next/image'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { useTheme } from './theme-provider'
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
@@ -20,19 +19,22 @@ interface AboutSectionProps {
   image?: Record<string, unknown>
 }
 
+const highlights = [
+  { icon: '⚡', label: 'Fast Learner', desc: 'Quick to adapt new tech' },
+  { icon: '🎯', label: 'Problem Solver', desc: 'Clean & scalable solutions' },
+  { icon: '🔗', label: 'Full Stack', desc: 'Frontend to deployment' },
+  { icon: '🤝', label: 'Team Player', desc: 'Async & collaborative' },
+]
+
 export function AboutSection({ title, intro, bio, image }: AboutSectionProps) {
-  const { theme } = useTheme()
   const sectionRef = useRef<HTMLElement>(null)
   const titleRef = useRef<HTMLHeadingElement>(null)
+  const imageWrapRef = useRef<HTMLDivElement>(null)
+  const orbitRef = useRef<SVGSVGElement>(null)
   const introRef = useRef<HTMLDivElement>(null)
   const bioRef = useRef<HTMLDivElement>(null)
-  const imageFrameRef = useRef<HTMLDivElement>(null)
-  const glowRef = useRef<HTMLDivElement>(null)
-  const borderRingRef = useRef<HTMLDivElement>(null)
-  const particlesRef = useRef<HTMLDivElement>(null)
-  const accentLine1Ref = useRef<HTMLDivElement>(null)
-  const accentLine2Ref = useRef<HTMLDivElement>(null)
-  const tagContainerRef = useRef<HTMLDivElement>(null)
+  const highlightsRef = useRef<HTMLDivElement>(null)
+  const badgeRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (!sectionRef.current) return
@@ -40,322 +42,253 @@ export function AboutSection({ title, intro, bio, image }: AboutSectionProps) {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: sectionRef.current,
-        start: 'top 75%',
-        end: 'top 20%',
+        start: 'top 70%',
       },
     })
 
-    // Title — letters slide up with 3D flip
+    // Title scramble
     if (titleRef.current) {
-      const chars = titleRef.current.querySelectorAll('.about-char')
-      gsap.set(chars, { opacity: 0, y: 60, rotateX: -90 })
-      tl.to(chars, {
+      const titleText = titleRef.current.textContent || ''
+      const glyphChars = '░▒▓█▄▀■□▪▫●○◆◇'
+      const el = titleRef.current
+      gsap.set(el, { opacity: 1 })
+
+      let iteration = 0
+      tl.call(() => {
+        const interval = window.setInterval(() => {
+          el.textContent = titleText
+            .split('')
+            .map((char, index) => {
+              if (char === ' ') return ' '
+              if (index < iteration) return titleText[index]
+              return glyphChars[Math.floor(Math.random() * glyphChars.length)]
+            })
+            .join('')
+          iteration += 1 / 2
+          if (iteration >= titleText.length) {
+            clearInterval(interval)
+            el.textContent = titleText
+          }
+        }, 40)
+      })
+      tl.to({}, { duration: 0.8 })
+    }
+
+    // Image — scale up from small with blur
+    if (imageWrapRef.current) {
+      gsap.set(imageWrapRef.current, { scale: 0.6, opacity: 0, filter: 'blur(20px)' })
+      tl.to(imageWrapRef.current, {
+        scale: 1,
         opacity: 1,
-        y: 0,
-        rotateX: 0,
-        duration: 0.6,
-        stagger: 0.04,
-        ease: 'back.out(1.5)',
-      })
+        filter: 'blur(0px)',
+        duration: 1,
+        ease: 'power3.out',
+      }, '-=0.4')
     }
 
-    // Intro — lines draw in from the left like a code editor
-    if (introRef.current) {
-      const lines = introRef.current.querySelectorAll('.intro-line')
-      gsap.set(lines, { opacity: 0, x: -40, clipPath: 'inset(0 100% 0 0)' })
-      tl.to(
-        lines,
-        {
-          opacity: 1,
-          x: 0,
-          clipPath: 'inset(0 0% 0 0)',
-          duration: 0.7,
-          stagger: 0.12,
-          ease: 'power3.out',
-        },
-        '-=0.3'
-      )
-    }
+    // Orbit ring
+    if (orbitRef.current) {
+      gsap.set(orbitRef.current, { opacity: 0, scale: 0.8, rotate: -180 })
+      tl.to(orbitRef.current, {
+        opacity: 1,
+        scale: 1,
+        rotate: 0,
+        duration: 1.2,
+        ease: 'power3.out',
+      }, '-=0.8')
 
-    // Bio content fade in
-    if (bioRef.current) {
-      gsap.set(bioRef.current, { opacity: 0, y: 30 })
-      tl.to(
-        bioRef.current,
-        { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' },
-        '-=0.3'
-      )
-    }
-
-    // === Portrait image animations ===
-
-    // Spotlight glow — fades in and breathes
-    if (glowRef.current) {
-      gsap.set(glowRef.current, { opacity: 0, scale: 0.5 })
-      tl.to(
-        glowRef.current,
-        { opacity: 1, scale: 1, duration: 1.2, ease: 'power2.out' },
-        0.2
-      )
-      // Continuous breathing glow
-      gsap.to(glowRef.current, {
-        scale: 1.15,
-        opacity: 0.8,
-        duration: 3,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-        delay: 2,
-      })
-    }
-
-    // Animated gradient border — spins in, then rotates continuously
-    if (borderRingRef.current) {
-      gsap.set(borderRingRef.current, { opacity: 0, rotate: -90, scale: 0.7 })
-      tl.to(
-        borderRingRef.current,
-        { opacity: 1, rotate: 0, scale: 1, duration: 1, ease: 'power3.out' },
-        0.4
-      )
-      // Slow continuous rotation for the gradient border
-      gsap.to(borderRingRef.current, {
+      // Continuous slow rotation
+      gsap.to(orbitRef.current, {
         rotate: 360,
-        duration: 8,
+        duration: 20,
         repeat: -1,
         ease: 'none',
         delay: 2,
       })
     }
 
-    // Image — gentle reveal with soft scale
-    if (imageFrameRef.current) {
-      gsap.set(imageFrameRef.current, { opacity: 0, scale: 1.15, filter: 'blur(10px)' })
-      tl.to(
-        imageFrameRef.current,
-        {
-          opacity: 1,
-          scale: 1,
-          filter: 'blur(0px)',
-          duration: 1.2,
-          ease: 'power2.out',
-        },
-        0.5
-      )
-      // Subtle gentle breathing — very slow, portrait-friendly
-      gsap.to(imageFrameRef.current, {
-        scale: 1.03,
-        duration: 4,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-        delay: 2.5,
-      })
+    // Badge
+    if (badgeRef.current) {
+      gsap.set(badgeRef.current, { opacity: 0, y: 20, scale: 0.8 })
+      tl.to(badgeRef.current, {
+        opacity: 1, y: 0, scale: 1, duration: 0.6, ease: 'back.out(2)',
+      }, '-=0.5')
     }
 
-    // Accent lines — draw in from edges
-    if (accentLine1Ref.current) {
-      gsap.set(accentLine1Ref.current, { scaleX: 0, transformOrigin: 'left center' })
-      tl.to(
-        accentLine1Ref.current,
-        { scaleX: 1, duration: 0.8, ease: 'power3.out' },
-        0.8
-      )
-    }
-    if (accentLine2Ref.current) {
-      gsap.set(accentLine2Ref.current, { scaleY: 0, transformOrigin: 'center top' })
-      tl.to(
-        accentLine2Ref.current,
-        { scaleY: 1, duration: 0.8, ease: 'power3.out' },
-        0.9
-      )
+    // Highlights cards
+    if (highlightsRef.current) {
+      const cards = highlightsRef.current.querySelectorAll('.highlight-card')
+      gsap.set(cards, { opacity: 0, y: 40, scale: 0.9 })
+      tl.to(cards, {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 0.6,
+        stagger: 0.12,
+        ease: 'power3.out',
+      }, '-=0.3')
     }
 
-    // Floating particles — fade in and drift
-    if (particlesRef.current) {
-      const dots = particlesRef.current.querySelectorAll('.about-particle')
-      gsap.set(dots, { opacity: 0, scale: 0 })
-      tl.to(
-        dots,
-        { opacity: 1, scale: 1, duration: 0.5, stagger: 0.1, ease: 'back.out(2)' },
-        1.0
-      )
-      // Each particle floats on its own path
-      dots.forEach((dot, i) => {
-        gsap.to(dot, {
-          y: `random(-15, 15)`,
-          x: `random(-10, 10)`,
-          duration: 3 + i * 0.7,
-          repeat: -1,
-          yoyo: true,
-          ease: 'sine.inOut',
-          delay: 2 + i * 0.2,
-        })
-      })
+    // Intro
+    if (introRef.current) {
+      gsap.set(introRef.current, { opacity: 0, y: 30 })
+      tl.to(introRef.current, {
+        opacity: 1, y: 0, duration: 0.8, ease: 'power2.out',
+      }, '-=0.4')
     }
 
-    // Skill tags — slide up with stagger
-    if (tagContainerRef.current) {
-      const tags = tagContainerRef.current.querySelectorAll('.about-tag')
-      gsap.set(tags, { opacity: 0, y: 20, scale: 0.8 })
-      tl.to(
-        tags,
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.4,
-          stagger: 0.08,
-          ease: 'back.out(1.5)',
-        },
-        1.2
-      )
+    // Bio
+    if (bioRef.current) {
+      gsap.set(bioRef.current, { opacity: 0, y: 20 })
+      tl.to(bioRef.current, {
+        opacity: 1, y: 0, duration: 0.7, ease: 'power2.out',
+      }, '-=0.4')
     }
   }, [title, intro, bio])
-
-  // Split intro into lines for animation
-  const introLines = intro
-    ? intro.match(/.{1,60}(\s|$)/g)?.map((s) => s.trim()) || [intro]
-    : []
-
-  const skillTags = ['React', 'Next.js', 'TypeScript', 'Node.js', 'Tailwind', 'Full-Stack']
 
   return (
     <section
       ref={sectionRef}
       id="about"
-      className="py-24 bg-linear-to-b from-slate-950 to-slate-900 relative overflow-hidden"
+      className="py-28 bg-linear-to-b from-slate-950 to-slate-900 relative overflow-hidden"
     >
-      {/* Background accent */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-4000"></div>
-        <div className="absolute top-1/3 right-0 w-80 h-80 bg-cyan-600 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob"></div>
-      </div>
+      {/* Subtle grid pattern */}
+      <div
+        className="absolute inset-0 opacity-[0.03] pointer-events-none"
+        style={{
+          backgroundImage: `linear-gradient(rgba(99,102,241,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(99,102,241,0.5) 1px, transparent 1px)`,
+          backgroundSize: '60px 60px',
+        }}
+      />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      {/* Corner gradient blurs */}
+      <div className="absolute top-0 right-0 w-125 h-125 bg-indigo-600/8 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-100 h-100 bg-cyan-600/6 rounded-full blur-3xl" />
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Title */}
-        <div className="mb-16 text-center overflow-hidden">
+        <div className="mb-20 text-center">
           <h2
             ref={titleRef}
-            className="text-4xl md:text-5xl font-bold text-white inline-flex flex-wrap justify-center gap-x-3"
-            style={{ perspective: '600px' }}
+            className="text-4xl md:text-5xl font-bold text-white font-mono opacity-0"
           >
-            {title.split('').map((char, i) => (
-              <span
-                key={i}
-                className="about-char inline-block"
-                style={{ display: char === ' ' ? 'inline' : undefined }}
-              >
-                {char === ' ' ? '\u00A0' : char}
-              </span>
-            ))}
+            {title}
           </h2>
+          <div className="mt-4 flex justify-center items-center gap-3">
+            <span className="h-px w-16 bg-linear-to-r from-transparent to-indigo-500/50" />
+            <span className="text-indigo-400 font-mono text-xs tracking-widest uppercase">who I am</span>
+            <span className="h-px w-16 bg-linear-to-l from-transparent to-indigo-500/50" />
+          </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-16 items-center">
-          {/* Text side */}
-          <div className="order-2 md:order-1">
-            {introLines.length > 0 && (
-              <div ref={introRef} className="mb-8 space-y-2">
-                {introLines.map((line, i) => (
-                  <div key={i} className="intro-line flex items-start gap-3">
-                    <span className="text-slate-500 font-mono text-sm select-none shrink-0 mt-1">
-                      {String(i + 1).padStart(2, '0')}
-                    </span>
-                    <p className="text-lg text-gray-300 leading-relaxed">{line}</p>
-                  </div>
-                ))}
-              </div>
-            )}
+        {/* Hero area — centered image with orbit */}
+        <div className="flex flex-col items-center mb-20">
+          <div className="relative w-64 h-64 md:w-80 md:h-80">
+            {/* Animated orbit ring */}
+            <svg
+              ref={orbitRef}
+              className="absolute -inset-6 md:-inset-8 w-[calc(100%+48px)] h-[calc(100%+48px)] md:w-[calc(100%+64px)] md:h-[calc(100%+64px)]"
+              viewBox="0 0 200 200"
+              fill="none"
+            >
+              <defs>
+                <linearGradient id="orbitGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#6366f1" stopOpacity="0.6" />
+                  <stop offset="25%" stopColor="#06b6d4" stopOpacity="0.3" />
+                  <stop offset="50%" stopColor="#6366f1" stopOpacity="0" />
+                  <stop offset="75%" stopColor="#06b6d4" stopOpacity="0.3" />
+                  <stop offset="100%" stopColor="#6366f1" stopOpacity="0.6" />
+                </linearGradient>
+              </defs>
+              <circle cx="100" cy="100" r="96" stroke="url(#orbitGrad)" strokeWidth="1.5" strokeDasharray="6 4" />
+              {/* Orbiting dots */}
+              <circle cx="100" cy="4" r="3" fill="#6366f1" opacity="0.8" />
+              <circle cx="196" cy="100" r="2.5" fill="#06b6d4" opacity="0.6" />
+              <circle cx="100" cy="196" r="2" fill="#8b5cf6" opacity="0.5" />
+            </svg>
 
-            {bio && (
-              <div ref={bioRef} className="prose prose-invert max-w-none prose-p:text-gray-300 prose-p:leading-relaxed">
-                <PortableText value={bio} />
-              </div>
-            )}
-          </div>
-
-          {/* Portrait image side */}
-          <div className="order-1 md:order-2 flex flex-col items-center gap-6">
-            <div className="relative flex items-center justify-center w-72 h-80 md:w-80 md:h-96">
-
-              {/* Soft spotlight glow behind portrait */}
+            {/* Image */}
+            {image && (
               <div
-                ref={glowRef}
-                className="absolute w-72 h-72 md:w-80 md:h-80 rounded-full opacity-0"
-                style={{
-                  background: theme === 'light'
-                    ? 'radial-gradient(circle, rgba(79,70,229,0.12) 0%, rgba(8,145,178,0.08) 40%, transparent 70%)'
-                    : 'radial-gradient(circle, rgba(99,102,241,0.25) 0%, rgba(6,182,212,0.15) 40%, transparent 70%)',
-                }}
-              />
-
-              {/* Animated gradient border ring */}
-              <div
-                ref={borderRingRef}
-                className="absolute w-64 h-72 md:w-72 md:h-80 rounded-4xl p-0.5 opacity-0"
-                style={{
-                  background: theme === 'light'
-                    ? 'conic-gradient(from 0deg, #0891b2, #4f46e5, #7c3aed, #0891b2)'
-                    : 'conic-gradient(from 0deg, #06b6d4, #6366f1, #8b5cf6, #06b6d4)',
-                }}
+                ref={imageWrapRef}
+                className="relative w-full h-full rounded-3xl overflow-hidden border-2 border-slate-700/80 shadow-2xl shadow-indigo-500/10 opacity-0"
               >
-                <div className="w-full h-full rounded-4xl bg-slate-950" />
-              </div>
+                <Image
+                  src={urlFor(image).url()}
+                  alt={title}
+                  fill
+                  className="object-cover"
+                />
+                {/* Overlay gradient */}
+                <div className="absolute inset-0 bg-linear-to-t from-slate-900/60 via-transparent to-transparent" />
 
-              {/* The portrait image — tall rounded rectangle, portrait-friendly */}
-              {image && (
-                <div
-                  ref={imageFrameRef}
-                  className="relative w-60 h-68 md:w-68 md:h-76 rounded-3xl overflow-hidden shadow-2xl shadow-indigo-500/20 opacity-0"
-                >
-                  <Image
-                    src={urlFor(image).url()}
-                    alt={title}
-                    fill
-                    className="object-cover"
-                  />
-                  {/* Subtle warm vignette for portrait depth */}
-                  <div className="absolute inset-0 shadow-[inset_0_0_60px_rgba(0,0,0,0.4)] rounded-3xl" />
-                  {/* Bottom gradient fade */}
-                  <div className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-slate-950/60 to-transparent" />
+                {/* Scan line */}
+                <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                  <div className="about-scanline absolute left-0 right-0 h-px bg-linear-to-r from-transparent via-indigo-400/40 to-transparent" />
                 </div>
-              )}
-
-              {/* Decorative accent lines */}
-              <div
-                ref={accentLine1Ref}
-                className="absolute -left-6 top-1/2 w-12 h-0.5 bg-linear-to-r from-cyan-400/60 to-transparent"
-              />
-              <div
-                ref={accentLine2Ref}
-                className="absolute -right-6 top-8 w-0.5 h-12 bg-linear-to-b from-indigo-400/60 to-transparent"
-              />
-
-              {/* Floating particles — small glowing dots around the portrait */}
-              <div ref={particlesRef} className="absolute inset-0 pointer-events-none">
-                <span className="about-particle absolute top-2 right-4 w-1.5 h-1.5 bg-cyan-400 rounded-full shadow-sm shadow-cyan-400/80" />
-                <span className="about-particle absolute top-12 -left-3 w-2 h-2 bg-indigo-400 rounded-full shadow-sm shadow-indigo-400/80" />
-                <span className="about-particle absolute bottom-16 -right-2 w-1 h-1 bg-violet-400 rounded-full shadow-sm shadow-violet-400/80" />
-                <span className="about-particle absolute bottom-8 left-2 w-1.5 h-1.5 bg-blue-400 rounded-full shadow-sm shadow-blue-400/80" />
-                <span className="about-particle absolute top-1/2 -right-4 w-1 h-1 bg-cyan-300 rounded-full shadow-sm shadow-cyan-300/80" />
-                <span className="about-particle absolute top-1/3 -left-5 w-1 h-1 bg-indigo-300 rounded-full shadow-sm shadow-indigo-300/80" />
               </div>
-            </div>
+            )}
 
-            {/* Skill tags beneath the portrait */}
-            <div ref={tagContainerRef} className="flex flex-wrap justify-center gap-2 max-w-xs">
-              {skillTags.map((tag) => (
-                <span
-                  key={tag}
-                  className="about-tag px-3 py-1 bg-slate-800/70 border border-slate-600/40 rounded-full text-xs font-mono text-gray-300 hover:border-cyan-500/50 hover:text-cyan-300 transition-colors duration-300"
-                >
-                  {tag}
-                </span>
-              ))}
+            {/* Available badge */}
+            <div
+              ref={badgeRef}
+              className="absolute -bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-2 bg-slate-800/90 backdrop-blur-md border border-slate-700 rounded-full shadow-lg opacity-0"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400" />
+              </span>
+              <span className="text-xs font-mono text-green-400 whitespace-nowrap">Open to work</span>
             </div>
           </div>
+        </div>
+
+        {/* Highlight cards */}
+        <div ref={highlightsRef} className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
+          {highlights.map((h) => (
+            <div
+              key={h.label}
+              className="highlight-card group bg-slate-800/30 backdrop-blur-sm border border-slate-700/60 rounded-2xl p-5 text-center hover:border-indigo-500/40 hover:bg-slate-800/50 transition-all duration-300 cursor-default"
+            >
+              <div className="text-2xl mb-3 group-hover:scale-110 transition-transform duration-300">{h.icon}</div>
+              <div className="text-sm font-semibold text-white mb-1">{h.label}</div>
+              <div className="text-xs text-slate-400">{h.desc}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Text content — centered, clean */}
+        <div className="max-w-3xl mx-auto space-y-6">
+          {intro && (
+            <div ref={introRef} className="opacity-0">
+              <p className="text-lg md:text-xl text-gray-300 leading-relaxed text-center">
+                {intro}
+              </p>
+            </div>
+          )}
+
+          {bio && (
+            <div
+              ref={bioRef}
+              className="prose prose-invert max-w-none prose-p:text-gray-400 prose-p:leading-relaxed prose-p:text-center opacity-0"
+            >
+              <PortableText value={bio} />
+            </div>
+          )}
         </div>
       </div>
+
+      <style jsx>{`
+        .about-scanline {
+          animation: aboutScan 3.5s ease-in-out infinite;
+        }
+        @keyframes aboutScan {
+          0% { top: -2%; opacity: 0; }
+          10% { opacity: 1; }
+          90% { opacity: 1; }
+          100% { top: 102%; opacity: 0; }
+        }
+      `}</style>
     </section>
   )
 }
